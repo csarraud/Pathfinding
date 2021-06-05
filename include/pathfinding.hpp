@@ -2,7 +2,9 @@
 #define PATHFINDING_H
 #pragma once
 
+#include <iostream>
 #include <SFML/Graphics.hpp>
+#include "node.hpp"
 
 #define X_NODES 20
 #define Y_NODES 20
@@ -15,6 +17,11 @@ class Pathfinding
 {
 	private:
 		sf::RenderWindow window;
+		int x_nodes, y_nodes;
+		int width, height;
+		int nodes_width, nodes_height;
+
+		Node* nodes;
 
 	public:
 		Pathfinding();
@@ -22,5 +29,7 @@ class Pathfinding
 		~Pathfinding();
 
 		void loop();
+		void create_nodes();
+		void draw_nodes();
 };
 #endif

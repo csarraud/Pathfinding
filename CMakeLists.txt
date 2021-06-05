@@ -9,7 +9,8 @@ include_directories(
     include
     ${SFML_INCLUDE_DIR})
 
-set(SRC src/pathfinding.cpp)
+set(SRC src/pathfinding.cpp
+        src/node.cpp)
 
 add_executable(pathfinding ${SRC})
 target_link_libraries(pathfinding sfml-graphics sfml-audio)
