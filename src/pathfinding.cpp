@@ -103,9 +103,9 @@ sf::Color Pathfinding::get_node_color(Node* node) {
 
 void Pathfinding::solve() {
 	Node* current_node = this->start_node;
-    current_node->goal_score = calculate_goal_score(&current_node);
+    calculate_goal_score(current_node);
     this->tested_nodes.push_back(current_node);
-
+    
     while(current_node != this->end_node) {
 
         current_node = get_best_node();
@@ -114,15 +114,38 @@ void Pathfinding::solve() {
             break;
         }
 
+        for(Node* node : get_neighbors(current_node)) {
+            
+            calculate_goal_score(node);
 
+            /*
+             * If the node isn't already in tested_nodes list
+             */
+            if(std::find(this->tested_nodes.begin(), this->tested_nodes.end(), node) == this->tested_nodes.end()) {
+                this->tested_nodes.push_back(node);
+            }
+        }
+
+        current_node->is_visited = true;
+        this->tested_nodes.pop_front();
+
+        draw_nodes();
     }
+
+    std::cout<<"Finished !"<<std::endl;
+    this->start_node = nullptr;
+    this->end_node = nullptr;
 }
 
-int Pathfinding::calculate_goal_score(Node& node) {
-	return std::sqrt(
-        (node.x - this->end_node.x) * (node.x - this->end_node.x) * 100
-        + (node.y - this->end_node.y) * (node.y - this->end_node.y) * 100
+int Pathfinding::calculate_goal_score(Node* node) {
+	int score = std::sqrt(
+        (node->x - this->end_node->x) * (node->x - this->end_node->x) * 100
+        + (node->y - this->end_node->y) * (node->y - this->end_node->y) * 100
     );
+
+    node->goal_score = score;
+    
+    return score;
 }
 
 Node* Pathfinding::get_best_node() {
@@ -131,7 +154,7 @@ Node* Pathfinding::get_best_node() {
         return n1->goal_score < n2->goal_score;
     });
 
-    while(!this->tested_nodes.empty() && this->tested_nodes.front().is_visited) {
+    while(!this->tested_nodes.empty() && this->tested_nodes.front()->is_visited) {
         this->tested_nodes.pop_front();
     }
 
@@ -140,6 +163,26 @@ Node* Pathfinding::get_best_node() {
     }
 
     return this->tested_nodes.front();
+}
+
+std::list<Node*> Pathfinding::get_neighbors(Node* node) {
+	std::list<Node*> neighbors;
+
+    for(int x = -1; x <= 1; x++) {
+        for(int y = 0; y <= 1; y++) {
+            int index = (node->x + x) * x_nodes + (node->y + y);
+
+            if(index < 0 && index > x_nodes * y_nodes) {
+                continue;
+            }
+
+            Node* neighbor = &this->nodes[index];
+
+            neighbors.push_back(neighbor);
+        }
+    }
+
+    return neighbors;
 }
 
 int main(int argc, char *argv[])

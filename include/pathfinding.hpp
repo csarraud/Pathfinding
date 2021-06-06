@@ -40,7 +40,8 @@ class Pathfinding
 		void draw_nodes();
 		sf::Color get_node_color(Node* node);
 		void solve();
-		int calculate_goal_score(Node& node);
+		int calculate_goal_score(Node* node);
 		Node* get_best_node();
+		std::list<Node*> get_neighbors(Node* node);
 };
 #endif
