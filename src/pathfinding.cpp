@@ -16,7 +16,8 @@ Pathfinding::Pathfinding(int width, int height, int x_nodes, int y_nodes)
 {
 	this->window.create(sf::VideoMode(width, height), "Pathfinding");
 
-
+    this->start_node = nullptr;
+    this->end_node = nullptr;
 }
 
 Pathfinding::~Pathfinding()
@@ -61,7 +62,7 @@ void Pathfinding::draw_nodes() {
             Node* node = &nodes[x * x_nodes + y];
 
             sf::RectangleShape shape(sf::Vector2f(nodes_width, nodes_height));
-            shape.setFillColor(sf::Color::White);
+            shape.setFillColor(get_node_color(node));
             shape.setOutlineColor(sf::Color::Black);
             shape.setOutlineThickness(1.f);
             shape.setPosition(sf::Vector2f(x * nodes_width, y * nodes_height));
@@ -71,6 +72,17 @@ void Pathfinding::draw_nodes() {
     }
 
     this->window.display();
+}
+
+sf::Color Pathfinding::get_node_color(Node* node) {
+	if(node->is_obstacle) {
+        return sf::Color(200, 200, 200);
+    }
+    else if(node->is_visited) {
+        return sf::Color::Yellow;
+    }
+
+    return sf::Color::White;
 }
 
 int main(int argc, char *argv[])

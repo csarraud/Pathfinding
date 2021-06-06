@@ -23,6 +23,9 @@ class Pathfinding
 
 		Node* nodes;
 
+		Node* start_node;
+		Node* end_node;
+
 	public:
 		Pathfinding();
 		Pathfinding(int width, int height, int x_nodes, int y_nodes);
@@ -31,5 +34,7 @@ class Pathfinding
 		void loop();
 		void create_nodes();
 		void draw_nodes();
+
+		sf::Color get_node_color(Node* node);
 };
 #endif
