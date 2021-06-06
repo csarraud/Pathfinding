@@ -18,6 +18,8 @@ Pathfinding::Pathfinding(int width, int height, int x_nodes, int y_nodes)
 
     this->start_node = nullptr;
     this->end_node = nullptr;
+
+    create_nodes();
 }
 
 Pathfinding::~Pathfinding()
@@ -35,6 +37,11 @@ void Pathfinding::loop() {
         {
             if (event.type == sf::Event::Closed) {
                 this->window.close();
+            }
+            else if(event.type == sf::Event::KeyPressed) {
+                if(this->start_node != nullptr && this->end_node != nullptr) {
+                    solve();
+                }
             }
         }
     }
@@ -54,6 +61,9 @@ void Pathfinding::create_nodes() {
             nodes[x * x_nodes + y].goal_score = __INT_MAX__;
         }
     }
+
+    this->start_node = &nodes[5];
+    this->end_node = &nodes[378];
 }
 
 void Pathfinding::draw_nodes() {
@@ -78,11 +88,39 @@ sf::Color Pathfinding::get_node_color(Node* node) {
 	if(node->is_obstacle) {
         return sf::Color(200, 200, 200);
     }
+    else if(node == this->start_node) {
+        return sf::Color::Green;
+    }
+    else if(node == this->end_node) {
+        return sf::Color::Red;
+    }
     else if(node->is_visited) {
         return sf::Color::Yellow;
     }
 
     return sf::Color::White;
+}
+
+void Pathfinding::solve() {
+	Node* current_node = this->start_node;
+    current_node->goal_score = calculate_goal_score(&current_node);
+    this->tested_nodes.push_back(current_node);
+
+    while(current_node != this->end_node) {
+
+        this->tested_nodes.sort([](const Node* n1, const Node* n2) {
+            return n1->goal_score < n2->goal_score;
+        });
+
+        
+    }
+}
+
+int Pathfinding::calculate_goal_score(Node& node) {
+	return std::sqrt(
+        (node.x - this->end_node.x) * (node.x - this->end_node.x) * 100
+        + (node.y - this->end_node.y) * (node.y - this->end_node.y) * 100
+    );
 }
 
 int main(int argc, char *argv[])

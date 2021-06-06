@@ -3,6 +3,9 @@
 #pragma once
 
 #include <iostream>
+#include <list>
+#include <algorithm>
+#include <cmath>
 #include <SFML/Graphics.hpp>
 #include "node.hpp"
 
@@ -22,6 +25,7 @@ class Pathfinding
 		int nodes_width, nodes_height;
 
 		Node* nodes;
+		std::list<Node*> tested_nodes;
 
 		Node* start_node;
 		Node* end_node;
@@ -34,7 +38,8 @@ class Pathfinding
 		void loop();
 		void create_nodes();
 		void draw_nodes();
-
 		sf::Color get_node_color(Node* node);
+		void solve();
+		int calculate_goal_score(Node& node);
 };
 #endif
