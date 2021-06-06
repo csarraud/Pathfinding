@@ -38,10 +38,29 @@ void Pathfinding::loop() {
             if (event.type == sf::Event::Closed) {
                 this->window.close();
             }
+            else if(event.type == sf::Event::MouseButtonPressed) {
+                int x = event.mouseButton.x;
+                int y = event.mouseButton.y;
+                
+                change_node_state(x, y);
+                draw_nodes();
+            }
             else if(event.type == sf::Event::KeyPressed) {
                 if(this->start_node != nullptr && this->end_node != nullptr) {
                     solve();
                 }
+            }
+        }
+    }
+}
+
+void Pathfinding::change_node_state(int x_window, int y_window) {
+	for(int x = 0; x < x_nodes; x++) {
+        for(int y = 0; y < y_nodes; y++) {
+            
+            if(x_window > x * nodes_width && x_window < (x + 1) * nodes_width
+                && y_window > y * nodes_height && y_window < (y + 1) * nodes_height) {
+                    this->nodes[x * x_nodes + y].is_obstacle = true;
             }
         }
     }
@@ -178,7 +197,9 @@ std::list<Node*> Pathfinding::get_neighbors(Node* node) {
 
             Node* neighbor = &this->nodes[index];
 
-            neighbors.push_back(neighbor);
+            if(!neighbor->is_obstacle) {
+                neighbors.push_back(neighbor);
+            }
         }
     }
 

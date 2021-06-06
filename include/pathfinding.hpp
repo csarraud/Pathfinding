@@ -36,6 +36,7 @@ class Pathfinding
 		~Pathfinding();
 
 		void loop();
+		void change_node_state(int x_window, int y_window);
 		void create_nodes();
 		void draw_nodes();
 		sf::Color get_node_color(Node* node);
