@@ -108,11 +108,13 @@ void Pathfinding::solve() {
 
     while(current_node != this->end_node) {
 
-        this->tested_nodes.sort([](const Node* n1, const Node* n2) {
-            return n1->goal_score < n2->goal_score;
-        });
+        current_node = get_best_node();
 
-        
+        if(current_node == nullptr) {
+            break;
+        }
+
+
     }
 }
 
@@ -121,6 +123,23 @@ int Pathfinding::calculate_goal_score(Node& node) {
         (node.x - this->end_node.x) * (node.x - this->end_node.x) * 100
         + (node.y - this->end_node.y) * (node.y - this->end_node.y) * 100
     );
+}
+
+Node* Pathfinding::get_best_node() {
+	
+    this->tested_nodes.sort([](const Node* n1, const Node* n2) {
+        return n1->goal_score < n2->goal_score;
+    });
+
+    while(!this->tested_nodes.empty() && this->tested_nodes.front().is_visited) {
+        this->tested_nodes.pop_front();
+    }
+
+    if(this->tested_nodes.empty()) {
+        return nullptr;
+    }
+
+    return this->tested_nodes.front();
 }
 
 int main(int argc, char *argv[])
