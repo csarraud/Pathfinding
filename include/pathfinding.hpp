@@ -6,6 +6,7 @@
 #include <list>
 #include <algorithm>
 #include <cmath>
+#include <thread>
 #include <SFML/Graphics.hpp>
 #include "node.hpp"
 
@@ -16,6 +17,8 @@
 #define NODE_WIDTH (WINDOW_WIDTH / X_NODES)
 #define NODE_HEIGHT (WINDOW_HEIGHT / Y_NODES)
 
+using namespace std::chrono;
+
 class Pathfinding
 {
 	private:
@@ -24,7 +27,7 @@ class Pathfinding
 		int width, height;
 		int nodes_width, nodes_height;
 
-		Node* nodes;
+		std::list<Node*> nodes;
 		std::list<Node*> tested_nodes;
 
 		Node* start_node;
