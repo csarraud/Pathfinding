@@ -193,7 +193,9 @@ std::list<Node*> Pathfinding::get_neighbors(Node* node) {
         for(int y = -1; y <= 1; y++) {
             int index = (node->x + x) * x_nodes + (node->y + y);
 
-            if(index < 0 || index >= x_nodes * y_nodes) {
+            if(index < 0 || index >= x_nodes * y_nodes || 
+                (node->x + x) < 0 || (node->x + x) >= x_nodes || 
+                (node->y + y) < 0 || (node->y + y) >= y_nodes) {
                 continue;
             }
             
