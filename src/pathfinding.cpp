@@ -88,7 +88,6 @@ void Pathfinding::create_nodes() {
 
 void Pathfinding::draw_nodes() {
 
-
     for(std::list<Node*>::iterator it = this->nodes.begin(); it != this->nodes.end(); it++) {
         sf::RectangleShape shape(sf::Vector2f(nodes_width, nodes_height));
         shape.setFillColor(get_node_color(*it));
@@ -115,6 +114,9 @@ sf::Color Pathfinding::get_node_color(Node* node) {
     }
     else if(node->is_visited) {
         return sf::Color::Yellow;
+    }
+    else if(std::find(this->tested_nodes.begin(), this->tested_nodes.end(), node) != this->tested_nodes.end()) {
+        return sf::Color::Cyan;
     }
 
     return sf::Color::White;
